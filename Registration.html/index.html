@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    
+    <!-- Include Tailwind CSS from CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Include Google Font (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Apply the Inter font family and dark background */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000; /* Pure black background */
+        }
+        /* Custom styles for the focus effect on the input fields */
+        .form-input-custom {
+            background-color: #1f2937; /* Gray-800 */
+            border: 1px solid #374151; /* Gray-700 */
+            color: #f3f4f6; /* Gray-100 */
+            transition: all 0.2s;
+        }
+        .form-input-custom:focus {
+            outline: none;
+            border-color: #dc2626; /* Red-600 */
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.5); /* Red focus ring */
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <!-- Registration Card -->
+    <div class="w-full max-w-lg bg-gray-900 rounded-2xl shadow-2xl p-8 md:p-12 border border-gray-800">
+
+        <h1 class="text-4xl font-extrabold text-white text-center mb-4">
+            Create <span class="text-red-600">Account</span>
+        </h1>
+        <p class="text-gray-400 text-center mb-10">
+            Join the community of narrative enthusiasts.
+        </p>
+
+        <!-- Registration Form -->
+        <form id="registration-form" class="space-y-6">
+            
+            <!-- Full Name -->
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-300 mb-2">Full Name</label>
+                <input type="text" id="name" name="name" required
+                       class="w-full px-4 py-3 rounded-lg form-input-custom" placeholder="name">
+            </div>
+
+            <!-- Email Address -->
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
+                <input type="email" id="email" name="email" required
+                       class="w-full px-4 py-3 rounded-lg form-input-custom" placeholder="you@example.com">
+            </div>
+
+            <!-- Password -->
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-300 mb-2">Password</label>
+                <input type="password" id="password" name="password" required minlength="8"
+                       class="w-full px-4 py-3 rounded-lg form-input-custom" placeholder="••••••••">
+            </div>
+
+            <!-- Confirm Password -->
+            <div>
+                <label for="confirm-password" class="block text-sm font-medium text-gray-300 mb-2">Confirm Password</label>
+                <input type="password" id="confirm-password" name="confirm-password" required minlength="8"
+                       class="w-full px-4 py-3 rounded-lg form-input-custom" placeholder="••••••••">
+            </div>
+
+            <!-- Terms and Conditions Checkbox -->
+            <div class="flex items-center">
+                <input id="terms" name="terms" type="checkbox" required
+                       class="h-4 w-4 text-red-600 bg-gray-700 border-gray-600 rounded focus:ring-red-500">
+                <label for="terms" class="ml-2 block text-sm text-gray-400">
+                    I agree to the <a href="#" class="text-red-500 hover:text-red-400 font-medium">Terms and Conditions</a>
+                </label>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit"
+                    class="w-full px-8 py-3 bg-red-700 text-white rounded-lg font-semibold hover:bg-red-600 transition-all duration-300 transform hover:scale-[1.01] shadow-lg shadow-red-900/50">
+                Register Now
+            </button>
+        </form>
+
+        <p class="mt-8 text-center text-gray-400 text-sm">
+            Already have an account? 
+            <a href="#" class="text-red-500 hover:text-red-400 font-medium">Sign in here</a>
+        </p>
+    </div>
+
+    <!-- Custom Modal/Message Box for Feedback -->
+    <div id="message-box" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 transition-opacity duration-300 opacity-0">
+        <div class="bg-gray-800 rounded-xl p-8 max-w-sm text-center shadow-2xl border border-red-600/50">
+            <h3 class="text-xl font-bold text-red-500 mb-3">Registration Successful!</h3>
+            <p class="text-gray-300 mb-6">Thank you for registering. You can now sign in with your new account.</p>
+            <button onclick="closeMessage()" class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-500 transition-colors">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('registration-form');
+        const msgBox = document.getElementById('message-box');
+
+        /**
+         * Closes the custom feedback message box.
+         */
+        function closeMessage() {
+            msgBox.classList.remove('opacity-100');
+            msgBox.classList.add('opacity-0');
+            // Hide the box completely after transition
+            setTimeout(() => {
+                msgBox.classList.add('hidden');
+            }, 300);
+        }
+
+        /**
+         * Handles the form submission event.
+         */
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Stop the form from submitting normally (reloading the page)
+
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            if (password !== confirmPassword) {
+                // In a real app, you'd show an error message near the password fields
+                console.error("Error: Passwords do not match.");
+                
+                // A better approach than just console.error: visual feedback
+                const mismatchError = document.createElement('p');
+                mismatchError.textContent = "Error: Passwords do not match!";
+                mismatchError.className = "text-red-500 text-sm mt-2 font-medium";
+                
+                const existingError = form.querySelector('.mismatch-error');
+                if (existingError) { existingError.remove(); } // Remove old error
+                
+                mismatchError.classList.add('mismatch-error');
+                document.getElementById('confirm-password').parentNode.appendChild(mismatchError);
+                return;
+            }
+
+            // Remove any previous password mismatch errors
+            const existingError = form.querySelector('.mismatch-error');
+            if (existingError) { existingError.remove(); }
+
+            // --- Simulate successful registration ---
+            
+            // Show the custom success message box
+            msgBox.classList.remove('hidden');
+            // Add a small delay to ensure the display property changes before starting the opacity transition
+            setTimeout(() => {
+                msgBox.classList.remove('opacity-0');
+                msgBox.classList.add('opacity-100');
+            }, 50);
+
+            // Optionally reset the form fields
+            form.reset();
+        });
+    </script>
+
+</body>
+</html>
